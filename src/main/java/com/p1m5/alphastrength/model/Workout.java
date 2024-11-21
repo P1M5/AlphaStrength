@@ -1,9 +1,6 @@
 package com.p1m5.alphastrength.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Workout {
@@ -14,25 +11,37 @@ public class Workout {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     //Mind the OAuth
-    // One-to-many relationship with user table
     private String username;
-    // One-to-many relationship with exercise table
     private String typeOfWorkout;
     private Integer duration;
 
+    // Many-to-One relationship with user table
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "username")
+    User user;
+
     public Workout() {}
 
-    public Workout(String username, String typeOfWorkout, Integer duration) {
+    public Workout(Long id, String username, String typeOfWorkout, Integer duration) {
+        this.id = id;
         this.username = username;
         this.typeOfWorkout = typeOfWorkout;
         this.duration = duration;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUsername() {

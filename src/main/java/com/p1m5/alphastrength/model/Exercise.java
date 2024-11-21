@@ -1,9 +1,6 @@
 package com.p1m5.alphastrength.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Exercise {
@@ -14,20 +11,25 @@ public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     private Integer repetitions;
 
     private String animationId;
 
+    // Many-to-One relationship with Workout table
     private String typeOfWorkout;
     private Integer duration;
     private Integer weightUsed;
     private Integer caloriesBurned;
 
+    @ManyToOne
+    @JoinColumn(name = "type_of_workout", referencedColumnName = "typeOfWorkout")
+    Workout workout;
+
     public Exercise() {}
 
-    public Exercise(Integer id, String animationId, String typeOfWorkout, Integer duration, Integer weightUsed, Integer caloriesBurned) {
+    public Exercise(Long id, String animationId, String typeOfWorkout, Integer duration, Integer weightUsed, Integer caloriesBurned) {
         this.id = id;
         this.animationId = animationId;
         this.typeOfWorkout = typeOfWorkout;
@@ -36,8 +38,16 @@ public class Exercise {
         this.caloriesBurned = caloriesBurned;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
+    }
+
+    public Workout getWorkout() {
+        return workout;
     }
 
     public Integer getRepetitions() {
