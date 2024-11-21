@@ -1,48 +1,47 @@
 package com.p1m5.alphastrength.rest;
 
-import com.p1m5.alphastrength.exception.DataAccessException;
 import com.p1m5.alphastrength.model.Exercise;
-import com.p1m5.alphastrength.repository.exerciseRepository;
+import com.p1m5.alphastrength.service.impl.exerciseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
+@Controller
 public class ExerciseController {
-    exerciseRepository repo;
 
-    public ExerciseController(exerciseRepository repo) {
-        this.repo = repo;
+    exerciseServiceImpl service;
+
+    @Autowired
+    public ExerciseController(exerciseServiceImpl service) {
+        this.service = service;
     }
 
-    // Implement createExercise,updateExercise
-    /* Figure out a better way to ensure we don't send null objects to the controller; aka
-    * throw an error instead of null
-    * */
+    /*
+    Implement post,put and delete mappings; Better logging and error handling
+     */
 
-    public void deleteExercise(Long id) {
+    @GetMapping
+    public ResponseEntity<List<Exercise>> getAllExercises() {
         try {
-            repo.deleteById(id);
-            System.out.println("Deleted exercise with id " + id); // Has to be replaced with proper logging; Log4j
+            return ResponseEntity.ok(service.getAllExercises());
         } catch (Exception e) {
-            System.out.println("Error deleting exercise with id " + id);
-            throw new DataAccessException(e.getMessage());
+            System.out.println("An error occured: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    public void deleteAllExercises() {
+    @GetMapping
+    public ResponseEntity<Exercise> getExerciseById(@RequestParam Long id) {
         try {
-            repo.deleteAll();
-            System.out.println("Deleted all exercises");
+            return ResponseEntity.ok(service.getExercise(id));
         } catch (Exception e) {
-            System.out.println("Error deleting all exercises");
-            throw new DataAccessException(e.getMessage());
+            System.out.println("An error occured: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    public Exercise getExercise(Long id) {
-        try {
-            System.out.println("Retrieving exercise with id " + id);
-            return repo.findById(id).isPresent() ? repo.findById(id).get() : null;
-        } catch (Exception e) {
-            System.out.println("Error retrieving exercise with id " + id);
-            throw new DataAccessException(e.getMessage());
-        }
-    }
 }
