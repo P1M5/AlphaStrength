@@ -13,6 +13,7 @@ public class User {
     private Integer id;
 
     // OAuth required
+    // One-to-many relationship with workout table
     private String username;
     private String password;
 
@@ -111,7 +112,6 @@ public class User {
         this.workoutPurpose = workoutPurpose;
     }
 
-    @Override
     public String toString() {
         return "User [id=" + id + ", username=" + username + ", password=" + password + ", pictureId=" + pictureId + ", workoutTypesStringArray="
                 + workoutTypesStringArray + ", height=" + height + ", weight=" + weight + ", age=" + age + ", gender=" + gender + ", workoutPurpose="
